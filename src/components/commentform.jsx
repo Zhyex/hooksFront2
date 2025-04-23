@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-let CommentForm = () =>{
+let CommentForm = ({getComment}) =>{
     let [comment, setComment]= useState("")
 
     let getMessage = (e) =>{
@@ -17,7 +17,7 @@ let CommentForm = () =>{
 
             </textarea>
             <br/>
-            <button className="btn btn-primary">Comentar</button>
+            <button className="btn btn-primary" onClick={()=>getComment(comment)}>Comentar</button>
         </div>
     )
 }

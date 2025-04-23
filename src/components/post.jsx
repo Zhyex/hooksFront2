@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import imgDessert from "./../assets/budino_cioccolato_cocco2.png";
 import cancelIcon from "./../assets/xIco.svg";
 import CommentForm from "./../components/commentform";
@@ -21,13 +21,30 @@ let Post = () => {
   let toggleComments = () =>{
     setBtnState(!btnToggle)
   }
+  //obtener datos de componentes hijos
+  let [texto, setTextComment] = useState("")
+
+  let getComment = (comment)=>{
+    setTextComment(comment)
+  }
   //Use Effects para los comentarios
   let listaComentarios = [
-    {id:1, text:"asdasdas"},
+    {id:1, text:"Que rico se ve!"},
     {id:2, text:"pasa receta"}
   ]
+  let [listData,setListData] = useState(listaComentarios)
+  //useEffect evita que se envíen tantas actualizaciones en simultáneo 
+  useEffect(()=>{
+    if(texto){
+      setListData([
+        ...listData,
+        { id : listData.length+1 , text : texto}
+      ])
+    }
+  },[texto])
 
 
+  console.log(listData)
   return(
       <div className="card" style={{"width": "18rem"}}>
         <div className="card-body">
@@ -41,7 +58,7 @@ let Post = () => {
         </div>
         <ul class="list-group list-group-flush">
           <li className="list-group-item d-flex justify-content-around">
-            <span>👍🏻❤️😂{number}</span> <span>2k☁️</span> <span> 1k🔁</span> 
+            <span>{number}👍🏻❤️😂</span> <span>{listData.length}☁️</span> <span> 1k🔁</span> 
           </li>
           <li className="list-group-item d-flex justify-content-around">
             <button className="btn btn-light" onClick={addLike}>👍🏻Like</button>
@@ -51,9 +68,10 @@ let Post = () => {
         </ul>
         <div className="card-footer">
           {/* if ternario para el uso del useState con booleano */}
-          { btnToggle && <CommentForm/> }
+          {/* se pasa en el props también como propiedad */}
+          { btnToggle && <CommentForm  getComment={getComment} /> }
         </div>
-        <ListComments arrayComentarios = {listaComentarios}/>
+        <ListComments arrayComentarios = {listData}/>
       </div>
   );
 };
